@@ -1,7 +1,7 @@
 const path = require("path");
 
 const { transformSync } = require("esbuild");
-const babelJest = require("babel-jest").default;
+const { createTransformer } = require("babel-jest");
 
 const loaders = ["js", "jsx", "ts", "tsx"];
 const nodeVersion =
@@ -18,5 +18,7 @@ exports.process = (code, file, ...rest) => {
     sourcefile: file
   };
   const cjsTransformed = transformSync(code, options).code;
-  return babelJest.process(cjsTransformed, file, ...rest);
+
+  const babelTransformer = createTransformer();
+  return babelTransformer.process(cjsTransformed, file, ...rest);
 };
